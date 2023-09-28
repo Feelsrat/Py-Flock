@@ -7,7 +7,7 @@ refresh_rate = 60
 screen_width = 800
 screen_height = 600
 trails_enabled = True
-speed_multiplier = 3
+speed_multiplier = 2
 max_prev_positions = 1000
 
 # Initialize Pygame
