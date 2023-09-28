@@ -12,7 +12,6 @@ from config import (
     max_prev_positions,
     trails_enabled,
 )
-from bird import Bird  # Import the Bird class from bird.py
 
 while running:
     for event in pygame.event.get():
