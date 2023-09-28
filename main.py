@@ -133,6 +133,9 @@ while running:
 
     current_mouse_position = pygame.mouse.get_pos()
 
+    #draw a red cursor at the mouse position
+    pygame.draw.rect(screen, (255, 0, 0), (current_mouse_position[0] - 5, current_mouse_position[1] - 5, 10, 10))
+
     for bird in birds:
         bird.update(dt, current_mouse_position)
         pygame.draw.circle(
