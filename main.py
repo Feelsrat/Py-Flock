@@ -21,6 +21,7 @@ trail_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
 prev_bird_positions = []
 max_prev_positions = 1000
 
+
 class Bird:
     position = pygame.math.Vector2(0, 0)
     velocity = pygame.math.Vector2(0, 0)
@@ -46,7 +47,7 @@ class Bird:
         desired *= self.max_speed
         steer = desired - self.velocity
         return steer
-    
+
     def update(self, dt, mouse_pos):
         # Seek the mouse position
         steer = self.seek(mouse_pos)
@@ -133,8 +134,12 @@ while running:
 
     current_mouse_position = pygame.mouse.get_pos()
 
-    #draw a red cursor at the mouse position
-    pygame.draw.rect(screen, (255, 0, 0), (current_mouse_position[0] - 5, current_mouse_position[1] - 5, 10, 10))
+    # draw a red cursor at the mouse position
+    pygame.draw.rect(
+        screen,
+        (255, 0, 0),
+        (current_mouse_position[0] - 5, current_mouse_position[1] - 5, 10, 10),
+    )
 
     for bird in birds:
         bird.update(dt, current_mouse_position)
@@ -146,7 +151,9 @@ while running:
         )
 
         # Add the current bird position to the list
-        prev_bird_positions.append((bird.position.copy(), bird.radius))  # Store both position and radius
+        prev_bird_positions.append(
+            (bird.position.copy(), bird.radius)
+        )  # Store both position and radius
 
         # Keep only the last 'max_prev_positions' positions to limit the trail length
         if len(prev_bird_positions) > max_prev_positions:
