@@ -5,6 +5,8 @@ refresh_rate = 60
 screen_width = 800
 screen_height = 600
 
+trails_enabled = True
+
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
@@ -42,10 +44,7 @@ class Bird:
         desired *= self.max_speed
         steer = desired - self.velocity
         return steer
-
-    def draw(self, surface):
-        pygame.draw.circle(surface, (255, 255, 255), self.position, self.radius)
-
+    
     def update(self, dt, mouse_pos):
         # Seek the mouse position
         steer = self.seek(mouse_pos)
@@ -60,7 +59,7 @@ class Bird:
         self.position += self.velocity * dt
         self.acceleration *= 0
 
-        # Wrap the bird around the screen if it goes off the edge
+        # Reflect bird off the screen edges
         if self.position.x < 0:
             self.position.x += screen_width
         elif self.position.x > screen_width:
@@ -155,20 +154,21 @@ while running:
     # Clear the trail surface
     trail_surface.fill((0, 0, 0, 0))
 
-    # Draw the trails using the previous bird positions and radius
-    for pos, radius in prev_bird_positions:
-        pygame.draw.circle(
-            trail_surface,
-            (255, 255, 255, 10),  # Trail color with transparency
-            (int(pos.x), int(pos.y)),
-            radius,  # Use the bird's radius as the trail width
-        )
+    if trails_enabled:
+        # Draw the trails using the previous bird positions and radius
+        for pos, radius in prev_bird_positions:
+            pygame.draw.circle(
+                trail_surface,
+                (255, 255, 255, 10),  # Trail color with transparency
+                (int(pos.x), int(pos.y)),
+                radius,  # Use the bird's radius as the trail width
+            )
 
-    # Set the alpha value of the trail surface to 128
-    trail_surface.set_alpha(128)
+        # Set the alpha value of the trail surface to 128
+        trail_surface.set_alpha(128)
 
-    # Draw the trail surface on the screen with alpha blending
-    screen.blit(trail_surface, (1, 0), special_flags=pygame.BLEND_RGBA_ADD)
+        # Draw the trail surface on the screen with alpha blending
+        screen.blit(trail_surface, (1, 0), special_flags=pygame.BLEND_RGBA_ADD)
 
     pygame.display.flip()
     dt = clock.tick(refresh_rate) / 1000
