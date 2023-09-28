@@ -1,6 +1,7 @@
 import pygame
 import random
 
+
 refresh_rate = 60
 screen_width = 800
 screen_height = 600
@@ -14,7 +15,8 @@ running = True
 dt = 0
 birds = []
 current_mouse_position = pygame.mouse.get_pos()
-bird_count = random.randint(10, 200)
+bird_count = random.randint(50, 200)
+speed_multiplier = 3
 trail_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
 prev_bird_positions = []
 max_prev_positions = 1000
@@ -60,14 +62,10 @@ class Bird:
         self.acceleration *= 0
 
         # Reflect bird off the screen edges
-        if self.position.x < 0:
-            self.position.x += screen_width
-        elif self.position.x > screen_width:
-            self.position.x -= screen_width
-        if self.position.y < 0:
-            self.position.y += screen_height
-        elif self.position.y > screen_height:
-            self.position.y -= screen_height
+        if self.position.x < 0 or self.position.x > screen_width:
+            self.velocity.x *= -1
+        if self.position.y < 0 or self.position.y > screen_height:
+            self.velocity.y *= -1
 
         for bird in birds:
             if bird != self:
@@ -118,8 +116,8 @@ if birds == []:
                     random.randint(0, screen_width),
                     random.randint(0, screen_height),
                 ),
-                random.randint(10, 100),
-                random.randint(10, 100),
+                random.randint(10, 100 * speed_multiplier),
+                random.randint(10, 100 * speed_multiplier),
                 random.randint(1, 3),
                 (255, 255, 255),
             )
