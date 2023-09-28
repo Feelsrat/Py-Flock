@@ -41,7 +41,6 @@ class Bird:
         desired = desired.normalize()
         desired *= self.max_speed
         steer = desired - self.velocity
-        steer.scale_to_length(min(steer.length(), self.max_force))
         return steer
 
     def draw(self, surface):
@@ -147,7 +146,7 @@ while running:
         )
 
         # Add the current bird position to the list
-        prev_bird_positions.append(bird.position.copy())
+        prev_bird_positions.append((bird.position.copy(), bird.radius))  # Store both position and radius
 
         # Keep only the last 'max_prev_positions' positions to limit the trail length
         if len(prev_bird_positions) > max_prev_positions:
@@ -156,13 +155,13 @@ while running:
     # Clear the trail surface
     trail_surface.fill((0, 0, 0, 0))
 
-    # Draw the trails using the previous bird positions
-    for pos in prev_bird_positions:
+    # Draw the trails using the previous bird positions and radius
+    for pos, radius in prev_bird_positions:
         pygame.draw.circle(
             trail_surface,
             (255, 255, 255, 10),  # Trail color with transparency
             (int(pos.x), int(pos.y)),
-            2,  # Adjust the width of the trail lines
+            radius,  # Use the bird's radius as the trail width
         )
 
     # Set the alpha value of the trail surface to 128
